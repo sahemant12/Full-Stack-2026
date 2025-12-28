@@ -12,6 +12,25 @@
 let sm1 = Symbol();
 let sm2 = Symbol(); //both are different
 
+// Types of datatype:
+// 3 difference:
+// 1. store stack, heap
+// 2. immutable, mutable
+// 3. copy created, reference is passed
+
+//Primitive data-type:
+//1. stored directly in the stack.
+//2. Fixed size, fast, and immutable (cannot be changed).
+//3. When assigned to another variable, a copy is created.
+//E.g: Number, String, Boolean, null, undefined, Symbol
+// NOTE: primitive data types are always pass by value.
+
+//Non-primitive data-type:
+//1. Stored in Heap, with a reference stored in Stack.
+//2. Can be modified after creation.
+//3. When assigned to another variable, a reference is passed, not a copy.
+//E.g: Object, Array, Function, Heap, Graph, Tree
+// NOTE: non-primitive data types are always pass by reference.
 
 // loops: loops are only work with arrays but 1 loop(for in) works mainly with object.
 
