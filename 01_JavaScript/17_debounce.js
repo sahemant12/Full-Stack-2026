@@ -1,7 +1,12 @@
 // Debounce
 // My Words: when we search for something and start typing, instead of sending API calls for each keystroke, debounce helps to send only one API call after a few seconds of inactivity.
-// Definition: Debounce prevents multiple API calls by ensuring a fn call runs only once after the user stops typing for a certain delay.
+
 // Mummy-bachi example: Suppose ek bacha ro raha hai chocolate khane ke liye. Uski mummy boli agar 5 mins chup rahega toh chocolate de dungi. Bacha 3 mins chup raha phir rone laga, phir usko 5 mins chup rahna hai, wo phir 4 mins chup raha aur phir rone laga. Jab tak wo bacha 5 mins tak chup nahi rahega usko chocolate nahi milega. 
+
+
+// For interview perpective:
+// Definition: Debounce prevents multiple API calls by ensuring a fn call runs only once after the user stops typing for a certain delay.
+// E.g: Like, it send only one API call after user's search input. It prevents API call for user's every keystrokes.
 
 // Code
 function debounceCode(fn, delay){
@@ -9,19 +14,57 @@ function debounceCode(fn, delay){
     return function(...args){
         clearTimeout(timeoutId);
         timeoutId = setTimeout(()=>{
-            fn.apply(this, args);
+            fn.apply(this, args); // 'this' here is 'fn', 'args' is what we are passing when calling the fn.
         }, delay);
     }
 }
- 
-function greet(name){
-    console.log(`Hello, ${name}`);   
-}
-// Another and better way:
-const debouncing = debounceCode(greet, 2000);
-debouncing("Hemant");
-debouncing("Zatch");
-debouncing("Raj");
+
+// E.g-1: user's search input
+// Problem (without debounce)
+input.addEventListener("keyup", () => { // input is input field.
+  searchAPI(input.value);
+});
+// For every keystroke it sending API call.
+
+// Solution using debounce:
+const debouncedSearch = debounceCode(searchAPI, 500);
+input.addEventListener("keyup", debouncedSearch);
+
+// What happens?
+// 1. User keeps typing → timer resets
+// 2. User stops typing for 500ms
+// 3. ✅ Only ONE API call is sent
+
+
+// E.g-2: Form validation: 
+// 1. User types email/password.
+// 2. You don’t want to validate on every key press.
+// 3. Debounce waits until typing stops.
+// 4. Then validates once.
+// 5. These things it validate: Username availability check, password strength check, Username availability check.
+
+
+// E.g-3: Window resize handler: Debounce helps to resize the window only once when resizing stops.
+window.addEventListener(
+  "resize",
+  debounceCode(() => {
+    recalculateLayout();
+  }, 300)
+);
+
+
+
+
+
+// Example for self understanding
+// function greet(name){
+//     console.log(`Hello, ${name}`);   
+// }
+// // Another and better way:
+// const debouncing = debounceCode(greet, 2000);
+// debouncing("Hemant");
+// debouncing("Zatch");
+// debouncing("Raj");
 
 
 // 1. `debounceCode(greet, 2000)` returns a function, which is stored in the variable `debouncing`.
@@ -31,7 +74,7 @@ debouncing("Raj");
 //    2. `setTimeout()` is registered and its reference ID is assigned to `timeoutId`.
 
 // 3. Second time calling `debouncing()`:
-//    1. `clearTimeout(timeoutId)` runs and cancels the previous `setTimeout()` that was still in the queue.
+//    1. `clearTimeout(timeoutId)` runs and cancels the previous `setTimeout()` that was still in the callback queue.
 //    2. A new `setTimeout()` is registered and its reference is stored in `timeoutId`.
 //    3. After the delay (2 seconds), this `setTimeout()` moves to the call stack for execution.
 //    4. Inside `setTimeout()`, `fn.apply(this, args)` runs.
@@ -39,14 +82,6 @@ debouncing("Raj");
 //       - `args` contains the arguments passed to `debouncing()`.
 //    5. Finally, the `greet()` function is executed with the correct argument.
 
-
-
-
-// const debouncing = debounceCode(()=> greet("Hemant"), 2000);
-// debouncing(); // because debouncing have same returned fn.
-// debouncing();
-// debouncing();
-// debouncing();
 
 
 // ✅ Why do we use fn.apply(this, args) inside setTimeout()?

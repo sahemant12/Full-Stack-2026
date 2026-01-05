@@ -1,0 +1,10 @@
+Why interviewers love these polyfills?
+
+Because they test:
+ 1. Closures
+ 2. Callbacks
+ 3. this
+ 4. Edge cases
+ 5. Array immutability
+
+They reveal how you think, not what you memorized.
