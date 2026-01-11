@@ -1,0 +1,11 @@
+1. Make 4 folder, 3 files: index.js, .env, .gitignore, src-> controllers, models, routes, middlewares
+
+2. npm i express dotenv cors mongoose
+3. npm i -D nodemon
+
+4. set "script" and "type":"module" in package.json file
+5. npm run dev : for script 'nodemon index.js' during development
+   npm start: for script 'node index.js' during production
+
+6. Make "utils" folder that have 'db' file for connection to database.
+
