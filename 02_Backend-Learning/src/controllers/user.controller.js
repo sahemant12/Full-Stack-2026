@@ -28,12 +28,12 @@ const registerUser = async (req, res) => {
     try{
         const user = await User.findOne({email});
         if(user){
-            return res.status(400).json({
+            return res.status(409).json({
             message: "User already exists"
         });
         }
 
-        const newUser = await User.create(req.body);
+        const newUser = await User.create(req.body); // Creates + saves
         
         const token = crypto.randomBytes(32).toString("hex");
         
@@ -197,8 +197,8 @@ const logIn = async (req, res) =>{
     }
 }
 const getMe = async (req, res) =>{
+    // get user by the help of 'id' that attached to the req.user in isLoggedIn
     try {
-
         const user = await User.findById(req.user.id).select("-password");     
         
         if(!user){

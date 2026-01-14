@@ -7,7 +7,8 @@ const isLoggedIn = async(req, res, next) =>{
 
     // get token from cookies
     // validate token
-    // get data from token
+    // verify token and get data from token
+    // add data to the user
        
     try{
         const token = req.cookies?.authToken;
