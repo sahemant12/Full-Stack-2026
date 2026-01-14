@@ -6,10 +6,10 @@ const router = express.Router();
 
 router
     .post("/register", registerUser)
-    .get("/verify/:userToken", verifyUser)
-    .post("/login", logIn)
+    .post("/verify/:userToken", verifyUser)
+    .post("/log-in", logIn)
     .get("/me", isLoggedIn, getMe)
-    .post("/logout", isLoggedIn, logOut)
+    .post("/log-out", isLoggedIn, logOut)
     .post("/forgot-password", forgotPassword)
     .post("/reset-password/:resetToken", resetPassword)
 

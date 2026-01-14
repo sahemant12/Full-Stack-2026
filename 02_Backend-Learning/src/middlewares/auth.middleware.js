@@ -10,11 +10,11 @@ const isLoggedIn = async(req, res, next) =>{
     // get data from token
        
     try{
-        const token = req.cookies?.tokenHu;
+        const token = req.cookies?.authToken;
         
         if(!token){
             return res.status(401).json({
-                message:"authentication failed",
+                message:"Authentication failed",
                 success:false
             });
         }
@@ -27,7 +27,7 @@ const isLoggedIn = async(req, res, next) =>{
         return res.status(401).json({
             message:"Invalid or expired token",
             success:false,
-            err: error.message
+            error: error.message
         });
     }
 };
