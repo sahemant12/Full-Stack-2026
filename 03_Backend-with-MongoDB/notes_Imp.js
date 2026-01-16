@@ -52,3 +52,6 @@ const cookieOptions = {
 
 // 1. Understood and memorize if needed then check definition.
 // 2. findOne({_id: id}) -> shortHand -> findById(id)
+
+
+// #6. ORM, ODM

@@ -85,7 +85,7 @@ const verifyUser = async (req, res) =>{
     // send success to user
 
     const {userToken} = req.params;
-
+    
     if(!userToken){
          return res.status(400).json({
             message: "Token not found"
@@ -184,7 +184,7 @@ const logIn = async (req, res) =>{
             user: {
                 id: user._id,
                 name: user.name,
-                role: user.role
+                role: user.role,
             }
         })
     }
