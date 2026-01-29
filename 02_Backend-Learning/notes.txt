@@ -9,3 +9,20 @@
 
 6. Make "utils" folder that have 'db' file for connection to database.
 
+7. (i) Design Db(make model)
+   (ii) write all the routes
+   (iii) write all the controllers method
+
+8. (i) Nodemailer: this library is use for sending mail.
+   (ii) mailtrap: best for sending testing mail.
+   (iii) Resend: best for sending real mail.
+
+9. clerk: use for authentication system.
+
+10. Zod, Yup, express-validator: validation library
+
+11. neon, planetscale, aiven: get sql DB.
+Prisma, drizzle, is like mongoose, but for SQL
+
+
+

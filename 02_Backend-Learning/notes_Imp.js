@@ -1,24 +1,34 @@
-// #1. generate token
 
-// 1. npm i crypto
-// 2. import crypto from "crypto";
-// 3. const token = crypto.randomBytes(32).toString("hex");
-
-
-// #2. Encrypt the password
+// #1. Bcrypt: Bcrypt is a password hashing function designed to securely store passwords.
 
 // 1. npm i bcryptjs
 // 2. import bcrypt from "bcryptjs";
-// 3. this.password = await bcrypt.hash(this.password, hash); // encrypt the password // Auto-gen a salt and hash.
+// 3. this.password = await bcrypt.hash(this.password, salt rounds); // or "cost factor"
 // 4. const checkPassword = await bcrypt.compare(this.password, user.password); // check password(correct or not)
 
+// NOTE/FLOW:
+// 1. when we create a password then bcrypt creates hash of this password but before that it add salt to the password so that even different user create same password, hash will be different everytime.
+// 2. Then, this hash is save in db as password.
+// 3. During login, user current password is internally converted into hashes using the same salt stored in db(salt is extracted from stored hash)and this hash is compare with db hash, if they match then login.
+// Salt: Random data added to password before hashing.
+// Salt Rounds(cost factor): Salt rounds make hashing computationally expensive, which makes brute-force attacks difficult.
 
-// #3. JWT token
+// #2. crypto: Crypto is a Node.js built-in module for cryptographic operations like generating random values, hashing, encryption. It is used in one-time actions like emailVerification, resetPasswordVerification.
+
+// 1. import crypto from "crypto";
+// 2. const token = crypto.randomBytes(32).toString("hex");
+
+// #3. JWT: JWT is a standard format for creating tokens that contain information. It is used in login sessions.
 
 // 1. npm i jsonwebtoken
 // 2. const token = jwt.sign(payload, secret, expiresIn); // generate jwt token
 // 3. const decoded = jwt.verify(token, secret); // decoded give payload
 
+// FLOW:
+// 1. 1st generate the JWT token by using payload and Secret key.
+// 2. Then send this JWT token to client. this token is store in cookies.
+// 3. whenever client send req, this token is automatically send in cookie.
+// 4. server verify token using secret key.
 
 // #4. How to set/get Cookies:
 

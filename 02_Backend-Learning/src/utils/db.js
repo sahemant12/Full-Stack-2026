@@ -7,10 +7,12 @@ dotenv.config();
 async function db() {
     try{
         await mongoose.connect(`${process.env.MONGODB_URL}`);
-        console.log("DB is Connected");       
+        // console.log("DB is Connected");   
+        console.log("✅ LOCAL DB Connected Successfully!");    
     }
-    catch(err){
-        console.log(`DB is not Connected. Err: ${err}`);
+    catch(error){
+        // console.log(`DB is not Connected. Err: ${err}`);
+        console.log("❌ Local Connection Failed:", error);
         process.exit(1); // It immediately stops the Node.js process(Server) and exits.      
     };
 }

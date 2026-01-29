@@ -1,0 +1,51 @@
+1. Auth page show, and do auth stuff then login.
+2. Home: 1. Create New Project 2. view all projects 3. user-icon: profile, logout
+
+#1. Create New Project
+    - project name
+    - description
+
+#2. All Projects(List)
+    - project name
+    - description
+    - members
+    - created
+    - actions(edit, delete)
+
+#3. Project(per)
+    - Task(Kanban Board)
+    - List view
+    - members
+    - Notes
+
+    1. Task(Kanban Board):
+        - New Task
+            - Task title
+            - description
+            - assigned to
+            - status(todo, inprogress, done)
+            - attachments
+        - kanban board: 3 board stuff
+
+        - New Task(click): give details
+
+    2. List view
+        - Task
+        - status
+        - assigned to
+        - created
+        - change status
+    
+    3. members
+        - member
+        - role(user, admin)
+        - joined
+        - actions
+    add member
+        - email
+        - role
+
+    4. Notes
+        - note content
+        - date
+        - icon and by:
