@@ -1,0 +1,54 @@
+# Flow of Leet-Lab
+
+#1. Auth -> LogIn
+
+#2. Landing page: Field
+    1. Search by title
+    2. Difficulties
+    3. All tags
+    4. Create Playlist
+        - PlayList Name
+        - Description
+        - create Btn
+    5. Problem list:
+        - Solved
+        - Title
+        - Tags
+        - Difficulty
+        - Actions
+
+#3. Click on problem -> Ques interface open like Leetcode
+    1. Left
+        1. Description
+            - example
+            - output
+            - constraints
+            - Test cases
+        
+        2. Submissions
+        3. Discussion
+        4. Hints
+
+    2. Right: 
+        1. Code Editor(have language option)(Monaco Code editor(also used by VS code))
+        2. Run Code
+        3. Submit Solution
+
+    Note: 
+        1. when click on the Run Code then its execution handle by judge0. We have also done api laying ourself so that it doesn't call judge0 directly.
+        2. Our code will run for each test case and give Status of each test case.
+        3. If any test case fail then submission will not happen.
+        4. Have 2 profile: USER(solve the problem) and ADMIN(can add problem).
+
+
+#4. myProfile:
+    1. description:
+        - pic, name, role
+        - email, user id
+        - Edit Profile, change Password
+
+    2. My Submissions
+    3. Problems Solved
+    4. My Playlists
+
+#5. Add problem field
