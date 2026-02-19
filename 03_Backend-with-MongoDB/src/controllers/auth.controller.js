@@ -1,6 +1,6 @@
-import User from "../models/auth.model";
-import crypto from "cryto";
-import sendMail from "../utils/mail";
+import User from "../models/auth.model.js";
+import crypto from "crypto";
+import sendMail from "../utils/mail.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
@@ -115,14 +115,14 @@ const LogIn = async (req, res) => {
     }
     try{
         const existingUser = await User.findOne({email});
-
+        console.log(existingUser);
         if(!existingUser || !existingUser.isVerified){
             res.status(400).json({
-                message: "Invalid user or verify 1st"
+                message: "Invalid user"
             });
         }
-        const isPasswordMatch = await bcrypt.compare(existingUser.password, password);
-
+        const isPasswordMatch = await bcrypt.compare(password, existingUser.password);
+        console.log(isPasswordMatch);
         if(!isPasswordMatch){
             res.status(401).json({
                 message: "Invalid email or password"
@@ -162,11 +162,46 @@ const LogIn = async (req, res) => {
 const getMe = async (req, res) => {
     // check isLoggedIn
     // send req.user decoded data to user's
+    try {
+        const user = await User.findById(req.user.id).select("-password");
+
+        if(!user){
+            res.status(404).json({
+            message: "User not found",
+            success: false
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            user
+        });
+
+    } catch (error) {
+        res.status(500).json({
+            message: "Failed to get user",
+            success: false,
+            error: error.message
+        });
+    }
+
     
 };
 const logOut = async (req, res) => {
     // check isLoggedIn
     // make JWT cookie expires
+    try {
+        res.cookie("authToken", "", {expires: new Date(0)});
+        res.status(200).json({
+            message: "loggout successfully",
+            success: true
+        });
+    } catch (error) {
+            return res.status(500).json({
+            error: error.message,
+            success: false,
+        }); 
+    }
 };
 const forgotPassword = async (req, res) => {
     // get email
@@ -175,6 +210,42 @@ const forgotPassword = async (req, res) => {
     // generate forgetPassword token and expired time
     // store token in db
     // send token via email to user's for resetPassword
+    const {email} = req.body;
+    if(!email){
+        res.status(400).json({
+            message: "Invalid email",
+            success: false
+        });
+    }
+    try {
+        const user = await User.findOne({email});
+        if(!user){
+            res.status(400).json({
+                message: "Invalid user",
+                success: false
+            });
+        }
+
+        const resetPasswordToken = crypto.randomBytes(32).toString("hex");
+        user.resetPasswordToken = resetPasswordToken;
+        user.resetPasswordExpires = Date.now() + 1000*60*10;
+        await user.save();
+
+        // send token to user's email
+        await sendMail(resetPasswordToken, email, "reset your password");
+
+        res.status(200).json({
+            message: "check your email for reset password",
+            success: true
+        });
+
+    } catch (error) {
+        res.status(500).json({
+            error: error.message,
+            success: false,
+            message: "Failed to reset Password"
+        });
+    }
 };
 const resetPassword = async (req, res) => {
     // get token from params and newPassword from req.body
@@ -182,6 +253,39 @@ const resetPassword = async (req, res) => {
     // find user based on token
     // set password value to new password
     // resetPassword successful
+    const {resetToken} = req.params;
+    const {password} = req.body;
+
+    if(!resetToken || !password){
+        res.status(400).json({
+            message: "Invalid token or password",
+            success: false
+        });
+    }
+    try {
+        const user = await User.findOne({resetPasswordToken: resetToken, resetPasswordExpires: {$gt: Date.now()}});
+        if(!user){
+            res.status(400).json({
+                message: "Invalid token",
+                success: false
+            });
+        }
+        user.password = password;
+        user.resetPasswordToken = null;
+        user.resetPasswordExpires = null;
+        await user.save();
+
+        res.status(200).json({
+            message: "Reset password successful",
+            success: true
+        });
+    } catch (error) {
+        res.status(500).json({
+            message: "Reset password failed",
+            success: false,
+            error: error.message
+        });
+    }
 };
 
 export {userRegister, userVerify, LogIn, getMe, logOut, forgotPassword, resetPassword};

@@ -10,6 +10,15 @@
     "nodemailer": "^7.0.12"
   },
   "scripts": {
-    "dev": "nodemon index.js"
-  }
+    "dev": "nodemon src/index.js"
+  },
+  "name": "03_backend-with-mongodb",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "devDependencies": {},
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module"
 }
