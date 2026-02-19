@@ -4,7 +4,7 @@
 // 1. npm i bcryptjs
 // 2. import bcrypt from "bcryptjs";
 // 3. this.password = await bcrypt.hash(this.password, salt rounds); // or "cost factor"
-// 4. const checkPassword = await bcrypt.compare(this.password, user.password); // check password(correct or not)
+// 4. const checkPassword = await bcrypt.compare(user.password, this.password); // check password(correct or not)
 
 // NOTE/FLOW:
 // 1. when we create a password then bcrypt creates hash of this password but before that it add salt to the password so that even different user create same password, hash will be different everytime.
@@ -21,8 +21,9 @@
 // #3. JWT: JWT is a standard format for creating tokens that contain information. It is used in login sessions.
 
 // 1. npm i jsonwebtoken
-// 2. const token = jwt.sign(payload, secret, expiresIn); // generate jwt token
-// 3. const decoded = jwt.verify(token, secret); // decoded give payload
+// 2. import jwt from "jsonwebtoken";
+// 3. const token = jwt.sign(payload, secret, expiresIn); // generate jwt token
+// 4. const decoded = jwt.verify(token, secret); // decoded give payload + metadata(iat, exp)
 
 // FLOW:
 // 1. 1st generate the JWT token by using payload and Secret key.
