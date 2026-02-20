@@ -2,4 +2,7 @@
 
 2. npm install prisma @prisma/client
 3. Initialize Prisma: npx prisma init -> Make prisma folder have "schema.prisma" file
-4. 
+4. Make schema model in schema.prisma
+5. npx prisma migrate
+6. npx prisma generate
+7. npx prisma db push
