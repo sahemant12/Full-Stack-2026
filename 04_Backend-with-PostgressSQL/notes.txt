@@ -12,3 +12,5 @@
 8. Now, use DB as instant in anywhere in your project. Similar as model "User" in MongoDB.
 
 9. npx prisma db push/pull // push code to the db.
+
+npx prisma format
