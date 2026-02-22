@@ -1,14 +1,2 @@
 
-1. npm i prisma
-2. i 2nd thing related to prisma: npm i @prisma/client
-3. Now initialized prisma app: npx prisma init
-
-4. Run this command for postgress connection: docker run --name my-LeetLab -e POSTGRES_USER=myuser -e POSTGRES_PASSWORD=mypassword -p 5432:5432 -d postgres
-
-5. src -> libs -> make prisma client (db.js)
-6. Make user model in schema.prisma
-7. npx prisma generate: in src generate 'generated folder->prisma'
-8. write code in db.js
-9. command: npx prisma migrate dev -> prisma-> add migrations folder
-
-10. whatever changes we have made sync with db: npx prisma db push
+Run this command for postgress connection: docker run --name my-LeetLab -e POSTGRES_USER=myuser -e POSTGRES_PASSWORD=mypassword -p 5432:5432 -d postgres

@@ -1,4 +1,4 @@
-import { db } from "../libs/db";
+import { prisma } from "../libs/db.js";
 import bcrypt from "bcryptjs";
 import { UserRole } from "../generated/prisma/index.js";
 import jwt from "jsonwebtoken";
@@ -6,7 +6,7 @@ import jwt from "jsonwebtoken";
 export const register = async (req, res) => {
     const {name, email, password} = req.body;
     try {
-        const existingUser = await db.user.findUnique({
+        const existingUser = await prisma.user.findUnique({
             where: {email}
         });
 
@@ -17,7 +17,7 @@ export const register = async (req, res) => {
         }
         const hashedPassword = await bcrypt(password, 10);
 
-        const newUser = await db.user.create({
+        const newUser = await prisma.user.create({
             data: {
                 email,
                 password: hashedPassword,
@@ -58,7 +58,7 @@ export const register = async (req, res) => {
 export const logIn = async (req, res) => {
     const {email, password} = req.body;
     try {
-        const user = await db.user.findUnique({
+        const user = await prisma.user.findUnique({
             where: {email}
         });
         if(!user){
