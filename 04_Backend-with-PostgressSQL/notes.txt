@@ -1,0 +1,14 @@
+1. Do all the basic stuff: npm init -y || npm i express || other files and folder
+
+2. npm install prisma @prisma/client @prisma/adapter-pg pg
+3. Initialize Prisma: npx prisma init -> Make prisma folder have "schema.prisma" file AND "prisma.config.ts"
+4. Make schema model in schema.prisma
+5. npx prisma migrate // This command creates the database tables based on your schema.
+6. npx prisma generate // Now run the following command to generate the Prisma Client:
+   // GENERATE: src -> generated -> prisma
+
+7. Instantiate Prisma Client: libs -> db.js
+
+8. Now, use DB as instant in anywhere in your project. Similar as model "User" in MongoDB.
+
+9. npx prisma db push/pull // push code to the db.
