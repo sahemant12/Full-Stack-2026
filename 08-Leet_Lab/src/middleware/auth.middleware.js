@@ -1,12 +1,13 @@
 import { prisma } from "../libs/db.js";
 import dotenv from "dotenv";
-import jwt from "jsonwebtoken";
+import jwt from "jsonwebtoken"; 
 
 dotenv.config();
 
 export const authMiddleware = async (req, res, next)=>{
     try {
         const jwtToken = req.cookies?.jwt;
+        
         if(!jwtToken){
             res.status(401).json({
                 message: "Unauthorized - No token provided",
