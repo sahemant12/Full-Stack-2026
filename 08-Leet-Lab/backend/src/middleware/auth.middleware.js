@@ -1,3 +1,8 @@
+import { prisma } from "../libs/db.js";
+import dotenv from "dotenv";
+import jwt from "jsonwebtoken";
+
+dotenv.config();
 
 export const authMiddleware = async (req, res, next)=>{
     try {
@@ -15,7 +20,7 @@ export const authMiddleware = async (req, res, next)=>{
                 success: false
             });
         }
-        const user = await db.user.findUnique({
+        const user = await prisma.user.findUnique({
             where: {id: decoded.id},
             select: {
                 id:true,
@@ -36,3 +41,5 @@ export const authMiddleware = async (req, res, next)=>{
         res.status(500).json({message:"Error authenticating user"});
     }
 }
+
+export const checkAdmin = async (req, res)=>{};
