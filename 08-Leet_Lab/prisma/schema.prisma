@@ -7,6 +7,11 @@ datasource db {
   provider = "postgresql"
 }
 
+enum UserRole {
+  ADMIN
+  USER
+}
+
 model User {
   id        String   @id @default(uuid())
   name      String?
@@ -16,9 +21,4 @@ model User {
   password  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-}
-
-enum UserRole {
-  ADMIN
-  USER
 }

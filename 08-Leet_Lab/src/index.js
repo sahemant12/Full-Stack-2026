@@ -1,5 +1,6 @@
 import express from "express";
 import dotenv from "dotenv";
+import authRoutes from "./routes/auth.routes.js";
 
 dotenv.config();
 
@@ -13,6 +14,7 @@ app.get("/check", (req, res)=>{
     res.send("Hello Hemant");
 });
 
+app.use("/api/v1/auth", authRoutes);
 
 
 app.listen(PORT, ()=>{

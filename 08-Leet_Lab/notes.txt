@@ -1,5 +1,5 @@
-#Extra: npx prisma format
-
+#Extra: npx prisma format || Prisma Client → JS code to query DB
+# for generating JWT_SECRET: openssl rand -hex 32
 
 1. Do all the basic stuff: npm init -y || npm i express || other files and folder
 
@@ -13,10 +13,11 @@
 4. Make schema model in schema.prisma.
 
 5. npx prisma migrate dev --name init
-   - Creates table in NeonDB based on your schema.
-   - Creates migration history folder.
+   - Creates table in DB(Neon) based on your schema.
+   - Creates migration history folder. Create SQL migration file.
    - Updates database schema.
-   - Automatically runs generate.
+   - Generate Prisma Client (prisma.user) DOWN
+   - Automatically runs generate Prisma Client(run generate).
 
 6. npx prisma generate
    - Generates Prisma Client (your DB API).
@@ -30,14 +31,14 @@
 
 8. Use Prisma anywhere in project (like MongoDB Models)
    - import prisma from "../libs/db.js";
-   - import prisma from "../libs/db.js";
+   - const users = await prisma.user.findMany();
 
 # Other things:
 
 1. npx prisma db push
    - Reads schema.Prisma
    - Creates tables in Neon DB
-   - No migration history
+   -* No migration history
    - Fast for development
 
 2. npx prisma db pull
@@ -45,8 +46,20 @@
    - Converts them into Prisma models.
    - Use when: Database already exists (like production DB)
 
+Note: We mainly use push/pull to sync with database.
 
 3. migrate dev vs reset
+# npx prisma migrate reset, It will:
+    - Delete ALL tables in database.
+    - Recreate database from migrations.
+    - Rerun seed (if exists).
+    - Generate client again
+    - Simple meaning: Full database wipe + rebuild from scratch
+    - Use when:
+        - Schema is broken
+        - Development phase
+        - Testing resets
+        - Never use in production.
 
 4. db push vs migrate dev
 
@@ -57,3 +70,21 @@
 | Production safe   | ❌       | ✅                 |
 | Faster            | ✅       | Slightly slower   |
 | Beginner friendly | ✅       | Yes (recommended) |
+
+
+5. Do we have to run npx prisma generate only once?
+    - No. Not only once.
+    - These commands auto-run generate: prisma migrate dev AND prisma db push
+    - So usually you don’t need to run generate manually.
+    - When YOU should run prisma generate (Practical Rule)
+        - After db pull
+        - After changing generator output path
+        - Prisma client folder deleted
+        -* for updating client
+
+Command Comparison (Crystal Clear)
+| Command       | Updates DB | Generates Client | Creates Migration History |
+| ------------- | ---------- | ---------------- | ------------------------- |
+| `migrate dev` | ✅ Yes      | ✅ Yes (auto)     | ✅ Yes                     |
+| `db push`     | ✅ Yes      | ✅ Yes (auto)     | ❌ No                      |
+| `generate`    | ❌ No       | ✅ Yes            | ❌ No                      |
