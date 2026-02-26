@@ -1,5 +1,13 @@
 
-export const createProblem = async (req, res)=>{};
+
+
+export const createProblem = async (req, res)=>{
+    const {  } = req.body;
+};
+
+
+
+
 export const getAllProblems = async (req, res)=>{};
 export const getProblemById = async (req, res)=>{};
 export const updateProblem = async (req, res)=>{};
