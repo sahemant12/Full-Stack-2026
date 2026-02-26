@@ -5,10 +5,13 @@ export const createProblem = async (req, res)=>{
     const { title, description, difficulty, tags, examples, constraints, testcases, codeSnippets, referenceSolutions } = req.body;
 
     // approach
-
-    // check the user role once again
+    // check the user role once again(adminMiddleware)
     try {
-        
+        for(const [language, solutionCode] of Object.entries(codeSnippets)){
+
+            const languageId = getJudge0LanguageId(language);
+
+        }
     } catch (error) {
         
     }

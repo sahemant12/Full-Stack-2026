@@ -1,6 +1,10 @@
 #Extra: npx prisma format || Prisma Client → JS code to query DB
 # for generating JWT_SECRET: openssl rand -hex 32
 
+##### Alternate of Judge0
+   - Rapid API
+   - Sulu
+
 1. Do all the basic stuff: npm init -y || npm i express || other files and folder
 
 2. npm install prisma @prisma/client @prisma/adapter-pg pg
