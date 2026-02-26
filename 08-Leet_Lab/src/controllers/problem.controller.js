@@ -5,8 +5,13 @@ export const createProblem = async (req, res)=>{
     const { title, description, difficulty, tags, examples, constraints, testcases, codeSnippets, referenceSolutions } = req.body;
 
     // approach
+
     // check the user role once again
-    // 
+    try {
+        
+    } catch (error) {
+        
+    }
 };
 
 
