@@ -2,7 +2,11 @@
 
 
 export const createProblem = async (req, res)=>{
-    const {  } = req.body;
+    const { title, description, difficulty, tags, examples, constraints, testcases, codeSnippets, referenceSolutions } = req.body;
+
+    // approach
+    // check the user role once again
+    // 
 };
 
 
