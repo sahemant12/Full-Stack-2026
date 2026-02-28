@@ -7,6 +7,8 @@ export const createProblem = async (req, res)=>{
 
     // approach
     // check the user role once again(adminMiddleware)
+    // to create the problem 1st by ADMIN: gives reference solution of all the language along with testcases and execute it by using judge0.
+    // If all the testcases passed for all the language the create the problem.
     try {
         for(const [language, solutionCode] of Object.entries(codeSnippets)){
 
@@ -29,7 +31,7 @@ export const createProblem = async (req, res)=>{
 
             const tokens = submissionResults.map((res)=> res.token);
 
-            const results = await pollBatchResults(tokens);
+            const results = await pollBatchResults(tokens); // check if all the testcases are accepted.
 
             for(let i=0; i< results.length; i++){
                 const result = results[i];
@@ -73,7 +75,9 @@ export const createProblem = async (req, res)=>{
 
 
 
-export const getAllProblems = async (req, res)=>{};
+export const getAllProblems = async (req, res)=>{
+    // get all problems
+};
 export const getProblemById = async (req, res)=>{};
 export const updateProblem = async (req, res)=>{};
 export const deleteProblem = async (req, res)=>{};
