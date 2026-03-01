@@ -87,4 +87,6 @@ export const updateProblem = async (req, res)=>{
 export const deleteProblem = async (req, res)=>{
     // deleteProblem
 };
-export const getAllProblemsSolvedByUser = async (req, res)=>{};
+export const getAllProblemsSolvedByUser = async (req, res)=>{
+    // getAllProblemsSolvedByUser
+};
