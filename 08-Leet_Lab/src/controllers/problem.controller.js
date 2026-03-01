@@ -78,7 +78,9 @@ export const createProblem = async (req, res)=>{
 export const getAllProblems = async (req, res)=>{
     // get all problems
 };
-export const getProblemById = async (req, res)=>{};
+export const getProblemById = async (req, res)=>{
+    // getProblemById
+};
 export const updateProblem = async (req, res)=>{
     // updateproblem
 };
