@@ -4,14 +4,14 @@ import { prisma } from "../libs/db.js";
 
 export const createProblem = async (req, res)=>{
     const { title, description, difficulty, tags, examples, constraints, testcases, codeSnippets, referenceSolutions } = req.body;
-
-    // approach
-    // check the user role once again(adminMiddleware)
-    // to create the problem 1st by ADMIN: gives reference solution of all the language along with testcases and execute it by using judge0.
-    // If all the testcases passed for all the language the create the problem.
     try {
+        // 1. ADMIN submit all the details of createProblem from title, description to referenceSolutions.
+        // 2. Run a for loop for each language to check whether the problem is valid or not along by the help of referenceSolutions. For each loop multiple test case will check.
+        // 3. If problem get correct output for each test case and language then we create this problem in DB. Else return failed in creating problem.
+        // 4. this checking will done by executing the code by the judge0, which also check the execution of user's solution.
         for(const [language, solutionCode] of Object.entries(codeSnippets)){
 
+            // 1. get languageId of each language.
             const languageId = getJudge0LanguageId(language);
 
             if(!languageId){
@@ -20,23 +20,31 @@ export const createProblem = async (req, res)=>{
                 });
             }
 
+            // 2. Prepare Judge0 Submissions for all the testcases that we can send to get the status of each testcases whether it is ACCEPTED or not.
             const submissions = testcases.map(({ input, output })=>({
                 source_code: solutionCode,
                 language_id: languageId,
                 stdin: input,
                 expected_output: output
-            }));            
+            }));
 
+
+            // 3. In batch submit all the prepared submissions that will return response that have array of object for all the testcases.
             const submissionResults = await submitBatch(submissions); // returned submission token which can be used to check submission status. // status: 3 means "ACCEPTED"
 
-            const tokens = submissionResults.map((res)=> res.token);
+            // 4. extract token: means convert into array that have token(not object).
+            // here, token represent each testcases.
+            const tokens = submissionResults.map((res)=> res.token); 
+            
+            // 5. By the help of token check the status of each testcase. No testcase should be in Queue or Processing.
+            // Based on these token we can execute our program until all the testcase have any result except being in Queue or Processing.
+            const results = await pollBatchResults(tokens);
 
-            const results = await pollBatchResults(tokens); // check if all the testcases are accepted.
-
+            // 6. Then, check whether each testcases ACCEPTED or not?
             for(let i=0; i< results.length; i++){
                 const result = results[i];
 
-                if(result.status.id !== 3){
+                if(result.status_id !== 3){
                     return res.status(400).json({
                         error: `Testcase ${i+1} failed for language ${language}`
                     });

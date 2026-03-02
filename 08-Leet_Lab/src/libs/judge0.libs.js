@@ -1,5 +1,5 @@
 import axios from "axios";
-
+import "dotenv/config";
 
 export const getJudge0LanguageId = (language)=>{
     const languageMap = {
@@ -28,7 +28,7 @@ export const pollBatchResults = async (tokens)=>{
 
         const results = data.submissions;
 
-        const isAllDone = results.every((r)=> r.status !== 1 && r.status !== 2);
+        const isAllDone = results.every((r)=> r.status_id !== 1 && r.status_id !== 2);
 
         if(isAllDone) return results;
         await sleep(1000);
