@@ -18,7 +18,7 @@ app.get("/check", (req, res)=>{
 });
 
 app.use("/api/v1/auth", authRoutes);
-app.use("api/v1/problems", problemRoutes);
+app.use("/api/v1/problems", problemRoutes);
 
 
 app.listen(PORT, ()=>{

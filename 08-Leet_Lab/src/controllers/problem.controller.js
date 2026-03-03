@@ -27,24 +27,31 @@ export const createProblem = async (req, res)=>{
                 stdin: input,
                 expected_output: output
             }));
-
+            console.log("0submissions: ", submissions);
+            
 
             // 3. In batch submit all the prepared submissions that will return response that have array of object for all the testcases.
             const submissionResults = await submitBatch(submissions); // returned submission token which can be used to check submission status. // status: 3 means "ACCEPTED"
+            console.log("0submissionResults: ", submissionResults);
+            
 
             // 4. extract token: means convert into array that have token(not object).
             // here, token represent each testcases.
             const tokens = submissionResults.map((res)=> res.token); 
+            console.log("tokens: ", tokens);
+            
             
             // 5. By the help of token check the status of each testcase. No testcase should be in Queue or Processing.
             // Based on these token we can execute our program until all the testcase have any result except being in Queue or Processing.
             const results = await pollBatchResults(tokens);
+            console.log("0results: ", results);
+            
 
             // 6. Then, check whether each testcases ACCEPTED or not?
             for(let i=0; i< results.length; i++){
                 const result = results[i];
 
-                if(result.status_id !== 3){
+                if(result.status.id !== 3){
                     return res.status(400).json({
                         error: `Testcase ${i+1} failed for language ${language}`
                     });
@@ -84,17 +91,113 @@ export const createProblem = async (req, res)=>{
 
 
 export const getAllProblems = async (req, res)=>{
-    // get all problems
+    try {
+        const problems = await prisma.problem.findMany({
+            include: {
+                solvedBy: {
+                    userId: req.user.id
+                }
+            }
+        });
+
+
+    if (!problems) {
+      return res.status(404).json({
+        error: "No problems Found",
+      });
+    }
+
+    res.status(200).json({
+      sucess: true,
+      message: "Message Fetched Successfully",
+      problems,
+    });
+
+    } catch (error) {
+    console.log(error);
+        return res.status(500).json({
+      error: "Error While Fetching Problems",
+    });
+    }
+
 };
 export const getProblemById = async (req, res)=>{
-    // getProblemById
+
+    const id = req.params;
+    try {
+        const problem = await prisma.user.findUnique({
+            where: {id},
+        });
+
+    if(!problem){
+        return res.status(404).json({ error: "Problem not found." });
+    }
+    return res.status(200).json({
+      sucess: true,
+      message: "Message Created Successfully",
+      problem,
+    });
+
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            error: "Error While Fetching Problem by id",
+        });
+    }
 };
 export const updateProblem = async (req, res)=>{
     // updateproblem
 };
 export const deleteProblem = async (req, res)=>{
     // deleteProblem
+    const {id} = req.params;
+    
+    try {
+        const problem = await prisma.problem.findUnique({where: id});
+
+        if (!problem) {
+            return res.status(404).json({ error: "Problem Not found" });
+        }
+        await prisma.problem.delete({where: {id}});
+
+        res.status(200).json({
+            success: true,
+            message: "Problem deleted Successfully",
+        });        
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({
+      error: "Error While deleting the problem",
+    });
+    }
 };
 export const getAllProblemsSolvedByUser = async (req, res)=>{
-    // getAllProblemsSolvedByUser
+    
+    try {
+        const allProblems = await prisma.problem.findMany({
+            where: {
+                solvedBy: {
+                    some: {
+                        userId:req.user.id
+                    }
+                }
+            },
+            include: {
+                solvedBy:{
+                    where:{
+                        userId:req.user.id
+                    }
+                }
+            }
+        });
+
+    res.status(200).json({
+      success:true,
+      message:"Problems fetched successfully",
+      allProblems
+    })
+    } catch (error) {
+        console.error("Error fetching problems :" , error);
+        res.status(500).json({error:"Failed to fetch problems"})
+    }
 };
