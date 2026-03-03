@@ -7,18 +7,18 @@ import {
 import prisma from "../libs/db.js";
 
 export const createProblem = async (req, res) => {
-    // 1. Admin submits all the problem details, from title and description to referenceSolutions.
+  // 1. Admin submits all the problem details, from title and description to referenceSolutions.
 
-   // 2. For each language, we run a loop to validate the problem using the referenceSolutions.
-   //    In each loop, all testcases are executed.
+  // 2. For each language, we run a loop to validate the problem using the referenceSolutions.
+  //    In each loop, all testcases are executed.
 
-    // 3. If the reference solution produces the correct output for every testcase in every language,
-    //    then we create the problem in the database.
-    //    Otherwise, we return an error and do not create the problem.
-    // ADMIN should not create broken problem.
+  // 3. If the reference solution produces the correct output for every testcase in every language,
+  //    then we create the problem in the database.
+  //    Otherwise, we return an error and do not create the problem.
+  // ADMIN should not create broken problem.
 
-    // 4. This validation is done by executing the reference solution using Judge0.
-    //    Judge0 is also used later to execute and evaluate users' submissions.
+  // 4. This validation is done by executing the reference solution using Judge0.
+  //    Judge0 is also used later to execute and evaluate users' submissions.
   const {
     title,
     description,
@@ -79,7 +79,6 @@ export const createProblem = async (req, res) => {
       //   '8f42bb89-8f73-463a-9549-cad56b11b435'
       // ]
 
-
       // 5. Judge0 execute code in background based on token and will repeatedly check until: Not "In Queue" and "Processing".
       const results = await pollBatchResults(tokens);
       console.log("0results: ", results);
@@ -122,7 +121,6 @@ export const createProblem = async (req, res) => {
       },
     });
 
-
     return res.status(201).json({
       sucess: true,
       message: "Problem Created Successfully",
@@ -138,20 +136,22 @@ export const createProblem = async (req, res) => {
 export const getAllProblems = async (req, res) => {
   try {
     const problems = await prisma.problem.findMany({
-      include: {
-        solvedBy: {
-          userId: req.user.id,
-        },
+      select: {
+        id: true,
+        title: true,
+        difficulty: true,
+        tags: true,
+        createdAt: true,
       },
     });
 
-    if (!problems) {
+    if (problems.length === 0) {
       return res.status(404).json({
         error: "No problems Found",
       });
     }
 
-    res.status(200).json({
+    return res.status(200).json({
       sucess: true,
       message: "Message Fetched Successfully",
       problems,
@@ -164,13 +164,20 @@ export const getAllProblems = async (req, res) => {
   }
 };
 export const getProblemById = async (req, res) => {
-  const id = req.params;
+  const id = req.params.id;
   try {
-    const problem = await prisma.user.findUnique({
+    const problem = await prisma.problem.findUnique({
       where: { id },
+      select: {
+        id: true,
+        title: true,
+        difficulty: true,
+        tags: true,
+        createdAt: true,
+      },
     });
 
-    if (!problem) {
+    if (problem.length === 0) {
       return res.status(404).json({ error: "Problem not found." });
     }
     return res.status(200).json({
@@ -186,21 +193,88 @@ export const getProblemById = async (req, res) => {
   }
 };
 export const updateProblem = async (req, res) => {
-  // updateproblem
+  const {
+    title,
+    description,
+    difficulty,
+    tags,
+    examples,
+    constraints,
+    testcases,
+    codeSnippets,
+    referenceSolutions,
+  } = req.body;
+  const { id } = req.params;
+  try {
+    for (const [language, solutionCode] of Object.entries(referenceSolutions)) {
+      const languageId = getJudge0LanguageId(language);
+
+      if (!languageId) {
+        return res.status(400).json({
+          error: `Language ${language} is not supported`,
+        });
+      }
+
+      const submissions = testcases.map(({ input, output }) => ({
+        source_code: solutionCode,
+        language_id: languageId,
+        stdin: input,
+        expected_output: output,
+      }));
+
+      const submissionResults = await submitBatch(submissions);
+      const tokens = submissionResults.map((res) => res.token);
+
+      const results = await pollBatchResults(tokens);
+
+      for (let i = 0; i < results.length; i++) {
+        const result = results[i];
+
+        if (result.status.id !== 3) {
+          return res.status(400).json({
+            error: `Testcase ${i + 1} failed for language ${language}`,
+          });
+        }
+      }
+    }
+    const updatedProblem = await prisma.problem.update({
+      where: { id, userId: req.user.id },
+      data: {
+        title,
+        description,
+        difficulty,
+        tags,
+        constraints,
+        testcases,
+        codeSnippets,
+        referenceSolutions,
+      },
+    });
+
+    return res.status(200).json({
+      sucess: true,
+      message: "Problem updated Successfully",
+      problem: updatedProblem,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      error: error.message,
+    });
+  }
 };
 export const deleteProblem = async (req, res) => {
   // deleteProblem
   const { id } = req.params;
 
   try {
-    const problem = await prisma.problem.findUnique({ where: id });
+    const problem = await prisma.problem.findUnique({ where: { id } });
 
-    if (!problem) {
+    if (problem.length === 0) {
       return res.status(404).json({ error: "Problem Not found" });
     }
     await prisma.problem.delete({ where: { id } });
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       message: "Problem deleted Successfully",
     });
