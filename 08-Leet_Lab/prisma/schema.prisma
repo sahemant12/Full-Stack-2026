@@ -1,5 +1,5 @@
 generator client {
-  provider = "prisma-client"
+  provider = "prisma-client-js"
   output   = "../src/generated/prisma"
 }
 
@@ -40,7 +40,7 @@ model Problem {
   description String
   difficulty  Difficulty
   tags        String[] // ["tag1", "tag2", "tag3"]
-  userId      String
+  userId      String // The ID of the User (admin) who created this problem.
   examples    Json
   constraints String
   hints       String?
@@ -54,7 +54,11 @@ model Problem {
   updatedAt DateTime @updatedAt
 
   //  Relationship
-  user  User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user  User   @relation(fields: [userId], references: [id], onDelete: Cascade) 
+  // fields: [userId] -> Which field in Problem stores the foreign key?
+  // references: [id]: Which field in User model does it reference?
+
+
   // submission Submission[]
   // solvedBy   ProblemSolved[]
   // problemsPlaylists ProblemInPlaylist[]

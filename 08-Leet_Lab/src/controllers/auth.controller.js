@@ -1,4 +1,4 @@
-import { prisma } from "../libs/db.js";
+import prisma from "../libs/db.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { UserRole } from "../generated/prisma/enums.ts";
@@ -25,7 +25,7 @@ export const register = async (req, res) => {
                 email,
                 password: hashedPassword,
                 name,
-                role: "ADMIN"
+                role: UserRole.USER
             }
         });
 
