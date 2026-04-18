@@ -28,42 +28,52 @@
 // removeAttribute()
 // hasAttribute()
 
+
 // 5. Styling Elements
 // element.style
 // classList.add()
 // classList.remove()
-// classList.toggle()
-// classList.contains()
+// classList.toggle() // Adds class if not present, removes if present.
+// classList.contains() // Checks if class is present
+
 
 // 6. Creating / Removing Elements
 // createElement()
-// appendChild()
-// append()
-// prepend()
-// remove()
-// removeChild()
-// replaceChild()
+// appendChild() // Adds an element as the last child of a parent.
+// append() // Modern version of appendChild().
+// prepend() // Adds an element as the first child of a parent.
+// remove() // Removes an element from the DOM.
+// removeChild() // Parent removes its child.
+// replaceChild() // Replaces a child element with another element.
+
+// Modern JS developers mostly use: createElement(), append(), prepend(), remove()
+// They avoid: appendChild(), removeChild(), replaceChild() 
+
+
+
 
 // 7. Traversing DOM
-// parentElement
-// children
-// firstElementChild
-// lastElementChild
-// nextElementSibling
-// previousElementSibling
-// closest()
+// parentElement // Returns the parent element
+// children // Returns all child elements
+// firstElementChild // Returns the first child element
+// lastElementChild // Returns the last child element
+// nextElementSibling // Returns the next sibling element
+// previousElementSibling // Returns the previous sibling element
+// closest() // Moves upwards and finds the nearest ancestor matching a selector.
+
+
 
 // 8. Event Handling (VERY IMPORTANT)
 // addEventListener()
 // removeEventListener()
 
 // Understand:
-// click
-// input
-// submit
-// change
-// keydown
-// mouseover
+// click // Triggered when user clicks.
+// input // Triggered every time user types. When it fires: Every keystroke.
+// submit // Triggered when user submits a form.
+// change // Triggered when user changes a value in a form element. When it fires: After user finishes (blur/enter).
+// keydown // Triggered when user presses a key.
+// mouseover // Triggered when user moves mouse over an element.
 
 // 9. Event Object
 // event.target
