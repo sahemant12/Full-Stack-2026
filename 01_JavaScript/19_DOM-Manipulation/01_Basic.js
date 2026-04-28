@@ -38,11 +38,12 @@
 
 
 // 6. Creating / Removing Elements
-// createElement()
-// appendChild() // Adds an element as the last child of a parent.
-// append() // Modern version of appendChild().
+// createElement() // Creates a new element.
+// append() // Adds an element as the last child of a parent.
 // prepend() // Adds an element as the first child of a parent.
 // remove() // Removes an element from the DOM.
+
+// appendChild() // Adds an element as the last child of a parent.
 // removeChild() // Parent removes its child.
 // replaceChild() // Replaces a child element with another element.
 
@@ -65,11 +66,16 @@
 
 // 8. Event Handling (VERY IMPORTANT)
 // addEventListener()
-// removeEventListener()
+// removeEventListener() // Stop event (cleanup)
+// E.g: Button disable after click
+function handleClick() {
+  console.log("Clicked once");
+  btn.removeEventListener("click", handleClick);
+}
 
 // Understand:
 // click // Triggered when user clicks.
-// input // Triggered every time user types. When it fires: Every keystroke.
+// input // Triggered/Fires every time user types(Every keystroke).
 // submit // Triggered when user submits a form.
 // change // Triggered when user changes a value in a form element. When it fires: After user finishes (blur/enter).
 // keydown // Triggered when user presses a key.
@@ -82,6 +88,7 @@
 // event.stopPropagation()
 
 // 10. Event Bubbling / Capturing / Delegation
+
 
 // 11. Forms Handling
 
